@@ -1,72 +1,318 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <!-- 
-      This is an HTML comment
-      You can write text in a comment and the content won't be visible in the page
-    -->
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+    
+    .character-sheet {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    
+    .header {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .basic-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .section {
+      background-color: #2b4b8c;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .attributes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    
+    .attributes-grid label {
+      color: white;
+    }
+    
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    
+    .weapon-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    .weapon-table th, .weapon-table td {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+    
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    
+    .stress-boxes {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin: 10px 0;
+    }
+    
+    .stress-box {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #000;
+    }
+    
+    label {
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .add-weapon-btn, .save-form {
+      background-color: #2b4b8c;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
 
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="https://glitch.com/favicon.ico" />
+    .add-weapon-btn:hover, .save-form:hover {
+      background-color: #3a5ca0;
+    }
 
-    <!--
-      This is the page head - it contains info the browser uses
-      Like the title, which appears on the browser tab but not inside the page
-      Further down you'll see the content that displays in the page
-    -->
-    <title>Hello World!</title>
+    .table-container {
+      margin-bottom: 20px;
+    }
+    
+    .save-form-button-container {
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="character-sheet">
+    <div class="header">
+      <div style="flex: 1">
+        <label>Name:</label>
+        <input type="text">
+      </div>
+      <div style="flex: 1">
+        <label>Role:</label>
+        <input type="text">
+      </div>
+    </div>
 
-    <!-- The website stylesheet -->
-    <link rel="stylesheet" href="/style.css" />
-
-    <!-- The website JavaScript file -->
-    <script src="/script.js" defer></script>
-  </head>
-  <body>
-    <!--
-      The body includes the content you see in the page
-      Each element is defined using tags, like this <div></div>
-      The attributes like class="wrapper" let us style elements in the CSS
-    -->
-    <div class="wrapper">
-      <div class="content" role="main">
-        <h1 class="title">Hello World!</h1>
-        <img
-          src="https://cdn.glitch.com/a9975ea6-8949-4bab-addb-8a95021dc2da%2Fillustration.svg?v=1618177344016"
-          class="illustration"
-          alt="Editor illustration"
-          title="Click the image!"
-        />
-        <div class="instructions">
-          <h2>Using this project</h2>
-          <p>
-            This is the Glitch <strong>Hello Website</strong> project. You can
-            use it to build your own site. Check out the code in the editor and open
-            the <span class="fileopener" data-file="TODO.md" data-line="0"
-              >TODO</span> for next steps!
-          </p>
-          <!--  🚧 TODO: ADD BUTTON HERE -->
-
-          <!-- Once you've added the button from TODO.md, click it in the page -->
-          <!-- Check out the function in script.js to see how it works -->
+    <div class="basic-info">
+      <div>
+        <label>Kiith Background:</label>
+        <input type="text">
+        <br><br>
+        <label>Environment:</label>
+        <input type="text">
+        <br><br>
+        <label>Upbringing:</label>
+        <input type="text">
+        <br><br>
+        <label>Rank:</label>
+        <input type="text">
+        <br><br>
+        <label>Requisition Units:</label>
+        <input type="number" value="0">
+      </div>
+      
+      <div>
+        <label>Armor Rating:</label>
+        <input type="number" value="0">
+        <br><br>
+        <label>Max Stress:</label>
+        <div class="stress-boxes">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+        </div>
+        <label>Injury:</label>
+        <div class="stress-boxes" style="grid-template-columns: repeat(3, 1fr);">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
+          <input type="checkbox" class="stress-box">
         </div>
       </div>
     </div>
-    <!-- The footer holds our remix button — you can keep or delete it ✂ -->
-    <footer class="footer">
-      <div class="links"></div>
-      <a
-        class="btn--remix"
-        target="_top"
-        href="https://glitch.com/edit/#!/remix/glitch-hello-website"
-      >
-        <img
-          src="https://cdn.glitch.com/605e2a51-d45f-4d87-a285-9410ad350515%2FLogo_Color.svg?v=1618199565140"
-          alt=""
-        />
-        Remix on Glitch
-      </a>
-    </footer>
-  </body>
+
+    <div class="section">
+      <h3>Attributes</h3>
+      <div class="attributes-grid">
+        <div>
+          <label>Agility:</label>
+          <input type="number" value="0">
+        </div>
+        <div>
+          <label>Brawn:</label>
+          <input type="number" value="0">
+        </div>
+        <div>
+          <label>Coordination:</label>
+          <input type="number" value="0">
+        </div>
+        <div>
+          <label>Insight:</label>
+          <input type="number" value="0">
+        </div>
+        <div>
+          <label>Reason:</label>
+          <input type="number" value="0">
+        </div>
+        <div>
+          <label>Will:</label>
+          <input type="number" value="0">
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Skills</h3>
+      <div class="skills-grid">
+        <div>
+          <label>Combat:</label>
+          <input type="number" value="0">
+        </div>
+        <div>
+          <label>Command:</label>
+          <input type="number" value="0">
+        </div>
+        <div>
+          <label>Engineering:</label>
+          <input type="number" value="0">
+        </div>
+        <div>
+          <label>Exploration:</label>
+          <input type="number" value="0">
+        </div>
+        <div>
+          <label>Flight:</label>
+          <input type="number" value="0">
+        </div>
+        <div>
+          <label>Medical:</label>
+          <input type="number" value="0">
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Equipment</h3>
+      <textarea rows="4"></textarea>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+      <div class="section">
+        <h3>Focuses</h3>
+        <textarea rows="4"></textarea>
+      </div>
+      
+      <div class="section">
+        <h3>Defining Aspects</h3>
+        <textarea rows="4"></textarea>
+      </div>
+      
+      <div class="section">
+        <h3>Truths and Talents</h3>
+        <textarea rows="4"></textarea>
+      </div>
+    </div>
+    <div class="table-container">
+      <table class="weapon-table" id="weaponTable">
+        <thead>
+          <tr>
+            <th>Weapon</th>
+            <th>Stress Rating</th>
+            <th>Range and Type</th>
+            <th>Effects</th>
+            <th>Qualities</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="text"></td>
+            <td><input type="number"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="add-weapon-btn" onclick="addWeaponRow()">Add Weapon</button>
+    </div>
+  </div>
+  <div class="save-form-button-container">
+    <button onclick="saveInfo()" class="save-form" type="button">Save</button>
+  </div>
+    <script>
+    function addWeaponRow() {
+      const table = document.getElementById('weaponTable').getElementsByTagName('tbody')[0];
+      const newRow = table.insertRow();
+      
+      // Create cells with inputs
+      for (let i = 0; i < 5; i++) {
+        const cell = newRow.insertCell();
+        const input = document.createElement('input');
+        input.type = i === 1 ? 'number' : 'text';
+        cell.appendChild(input);
+      }
+    }
+  </script>
+  
+  <script>
+    function saveInfo() {
+      console.log('Save TK')
+    }
+  </script>
+</body>
 </html>
