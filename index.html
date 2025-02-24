@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Homeworld Revelations Character Sheet Creator and Manager</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -315,6 +316,7 @@
     <button onclick="exportInfo()" class="retrieve-form" type="button">Export</button>
     <button onclick="importInfo()" class="retrieve-form" type="button">Import</button>
         <button onclick="generateFilledShareURL()" class="retrieve-form" type="button">Generate Share URL</button>
+    <br /><br /><small>Save and Retrieve will work with LocalStorage. Import and URL based retrieval of your character will overwrite localStorage saved values. </small>
   </div>
   
   <script language="javascript" src="base64-string.js" ></script>
@@ -384,6 +386,8 @@
         const file = event.target.files[0];
         const reader = new FileReader();
         reader.onload = e => {
+          localStorage.clear();
+
           const data = JSON.parse(e.target.result);
           for (const key in data) {
             localStorage.setItem(key, data[key]);
@@ -441,6 +445,8 @@
       if (encodedData) {
         const json = LZString.decompressFromEncodedURIComponent(decodeURIComponent(encodedData));
         const data = JSON.parse(json);
+        localStorage.clear();
+
         for (const key in data) {
           localStorage.setItem(key, data[key]);
         }
