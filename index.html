@@ -9,27 +9,27 @@
       padding: 20px;
       background-color: #f0f0f0;
     }
-    
+
     .character-sheet {
       background-color: #fff;
       border-radius: 15px;
       padding: 20px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    
+
     .header {
       display: flex;
       gap: 20px;
       margin-bottom: 20px;
     }
-    
+
     .basic-info {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
       margin-bottom: 20px;
     }
-    
+
     .section {
       background-color: #2b4b8c;
       color: white;
@@ -37,34 +37,34 @@
       border-radius: 8px;
       margin-bottom: 15px;
     }
-    
+
     .attributes-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
     }
-    
+
     .attributes-grid label {
       color: white;
     }
-    
+
     .skills-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
     }
-    
+
     .weapon-table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
     }
-    
+
     .weapon-table th, .weapon-table td {
       border: 1px solid #ccc;
       padding: 8px;
     }
-    
+
     input[type="text"], input[type="number"] {
       width: 100%;
       padding: 8px;
@@ -72,7 +72,7 @@
       border-radius: 4px;
       box-sizing: border-box;
     }
-    
+
     textarea {
       width: 100%;
       padding: 8px;
@@ -81,26 +81,26 @@
       box-sizing: border-box;
       resize: vertical;
     }
-    
+
     .stress-boxes {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 5px;
       margin: 10px 0;
     }
-    
+
     .stress-box {
       width: 20px;
       height: 20px;
       border: 1px solid #000;
     }
-    
+
     label {
       font-weight: bold;
       color: #333;
     }
-    
-    .add-weapon-btn, .save-form {
+
+    .add-weapon-btn, .save-form, .retrieve-form {
       background-color: #2b4b8c;
       color: white;
       border: none;
@@ -110,14 +110,14 @@
       margin-top: 10px;
     }
 
-    .add-weapon-btn:hover, .save-form:hover {
+    .add-weapon-btn:hover, .save-form:hover, .retrieve-form:hover {
       background-color: #3a5ca0;
     }
 
     .table-container {
       margin-bottom: 20px;
     }
-    
+
     .save-form-button-container {
       text-align: right;
     }
@@ -127,61 +127,61 @@
   <div class="character-sheet">
     <div class="header">
       <div style="flex: 1">
-        <label>Name:</label>
-        <input type="text">
+        <label for="name">Name:</label>
+        <input type="text" id="name">
       </div>
       <div style="flex: 1">
-        <label>Role:</label>
-        <input type="text">
+        <label for="role">Role:</label>
+        <input type="text" id="role">
       </div>
     </div>
 
     <div class="basic-info">
       <div>
-        <label>Kiith Background:</label>
-        <input type="text">
+        <label for="kiith-background">Kiith Background:</label>
+        <input type="text" id="kiith-background">
         <br><br>
-        <label>Environment:</label>
-        <input type="text">
+        <label for="environment">Environment:</label>
+        <input type="text" id="environment">
         <br><br>
-        <label>Upbringing:</label>
-        <input type="text">
+        <label for="upbringing">Upbringing:</label>
+        <input type="text" id="upbringing">
         <br><br>
-        <label>Rank:</label>
-        <input type="text">
+        <label for="rank">Rank:</label>
+        <input type="text" id="rank">
         <br><br>
-        <label>Requisition Units:</label>
-        <input type="number" value="0">
+        <label for="requisition-units">Requisition Units:</label>
+        <input type="number" id="requisition-units" value="0">
       </div>
-      
+
       <div>
-        <label>Armor Rating:</label>
-        <input type="number" value="0">
+        <label for="armor-rating">Armor Rating:</label>
+        <input type="number" id="armor-rating" value="0">
         <br><br>
-        <label>Max Stress:</label>
-        <div class="stress-boxes">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
+        <label for="max-stress">Max Stress:</label>
+        <div class="stress-boxes" id="max-stress">
+          <input type="checkbox" class="stress-box" id="stress-1">
+          <input type="checkbox" class="stress-box" id="stress-2">
+          <input type="checkbox" class="stress-box" id="stress-3">
+          <input type="checkbox" class="stress-box" id="stress-4">
+          <input type="checkbox" class="stress-box" id="stress-5">
+          <input type="checkbox" class="stress-box" id="stress-6">
+          <input type="checkbox" class="stress-box" id="stress-7">
+          <input type="checkbox" class="stress-box" id="stress-8">
+          <input type="checkbox" class="stress-box" id="stress-9">
+          <input type="checkbox" class="stress-box" id="stress-10">
+          <input type="checkbox" class="stress-box" id="stress-11">
+          <input type="checkbox" class="stress-box" id="stress-12">
+          <input type="checkbox" class="stress-box" id="stress-13">
+          <input type="checkbox" class="stress-box" id="stress-14">
+          <input type="checkbox" class="stress-box" id="stress-15">
         </div>
-        <label>Injury:</label>
-        <div class="stress-boxes" style="grid-template-columns: repeat(3, 1fr);">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
-          <input type="checkbox" class="stress-box">
+        <label for="injury">Injury:</label>
+        <div class="stress-boxes" id="injury" style="grid-template-columns: repeat(3, 1fr);">
+          <input type="checkbox" class="stress-box" id="injury-1">
+          <input type="checkbox" class="stress-box" id="injury-2">
+          <input type="checkbox" class="stress-box" id="injury-3">
+          <input type="checkbox" class="stress-box" id="injury-4">
         </div>
       </div>
     </div>
@@ -190,28 +190,28 @@
       <h3>Attributes</h3>
       <div class="attributes-grid">
         <div>
-          <label>Agility:</label>
-          <input type="number" value="0">
+          <label for="agility">Agility:</label>
+          <input type="number" id="agility" value="0">
         </div>
         <div>
-          <label>Brawn:</label>
-          <input type="number" value="0">
+          <label for="brawn">Brawn:</label>
+          <input type="number" id="brawn" value="0">
         </div>
         <div>
-          <label>Coordination:</label>
-          <input type="number" value="0">
+          <label for="coordination">Coordination:</label>
+          <input type="number" id="coordination" value="0">
         </div>
         <div>
-          <label>Insight:</label>
-          <input type="number" value="0">
+          <label for="insight">Insight:</label>
+          <input type="number" id="insight" value="0">
         </div>
         <div>
-          <label>Reason:</label>
-          <input type="number" value="0">
+          <label for="reason">Reason:</label>
+          <input type="number" id="reason" value="0">
         </div>
         <div>
-          <label>Will:</label>
-          <input type="number" value="0">
+          <label for="will">Will:</label>
+          <input type="number" id="will" value="0">
         </div>
       </div>
     </div>
@@ -220,51 +220,51 @@
       <h3>Skills</h3>
       <div class="skills-grid">
         <div>
-          <label>Combat:</label>
-          <input type="number" value="0">
+          <label for="combat">Combat:</label>
+          <input type="number" id="combat" value="0">
         </div>
         <div>
-          <label>Command:</label>
-          <input type="number" value="0">
+          <label for="command">Command:</label>
+          <input type="number" id="command" value="0">
         </div>
         <div>
-          <label>Engineering:</label>
-          <input type="number" value="0">
+          <label for="engineering">Engineering:</label>
+          <input type="number" id="engineering" value="0">
         </div>
         <div>
-          <label>Exploration:</label>
-          <input type="number" value="0">
+          <label for="exploration">Exploration:</label>
+          <input type="number" id="exploration" value="0">
         </div>
         <div>
-          <label>Flight:</label>
-          <input type="number" value="0">
+          <label for="flight">Flight:</label>
+          <input type="number" id="flight" value="0">
         </div>
         <div>
-          <label>Medical:</label>
-          <input type="number" value="0">
+          <label for="medical">Medical:</label>
+          <input type="number" id="medical" value="0">
         </div>
       </div>
     </div>
 
     <div class="section">
       <h3>Equipment</h3>
-      <textarea rows="4"></textarea>
+      <textarea id="equipment" rows="4"></textarea>
     </div>
 
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
       <div class="section">
         <h3>Focuses</h3>
-        <textarea rows="4"></textarea>
+        <textarea id="focuses" rows="4"></textarea>
       </div>
-      
+
       <div class="section">
         <h3>Defining Aspects</h3>
-        <textarea rows="4"></textarea>
+        <textarea id="defining-aspects" rows="4"></textarea>
       </div>
-      
+
       <div class="section">
         <h3>Truths and Talents</h3>
-        <textarea rows="4"></textarea>
+        <textarea id="truths-talents" rows="4"></textarea>
       </div>
     </div>
     <div class="table-container">
@@ -280,11 +280,11 @@
         </thead>
         <tbody>
           <tr>
-            <td><input type="text"></td>
-            <td><input type="number"></td>
-            <td><input type="text"></td>
-            <td><input type="text"></td>
-            <td><input type="text"></td>
+            <td><input type="text" id="weapon-1"></td>
+            <td><input type="number" id="stress-rating-1"></td>
+            <td><input type="text" id="range-type-1"></td>
+            <td><input type="text" id="effects-1"></td>
+            <td><input type="text" id="qualities-1"></td>
           </tr>
         </tbody>
       </table>
@@ -293,26 +293,46 @@
   </div>
   <div class="save-form-button-container">
     <button onclick="saveInfo()" class="save-form" type="button">Save</button>
+	<button onclick="fillSavedInfo()" class="retrieve-form" type="button">Retrieve</button>
   </div>
-    <script>
+  <script>
     function addWeaponRow() {
       const table = document.getElementById('weaponTable').getElementsByTagName('tbody')[0];
       const newRow = table.insertRow();
-      
+      const rowCount = table.rows.length;
+
       // Create cells with inputs
       for (let i = 0; i < 5; i++) {
         const cell = newRow.insertCell();
         const input = document.createElement('input');
         input.type = i === 1 ? 'number' : 'text';
+        input.id = `weapon-${rowCount}-${i}`;
         cell.appendChild(input);
       }
     }
-  </script>
-  
-  <script>
-    function saveInfo() {
-      console.log('Save TK')
+
+	function saveInfo() {
+      const inputs = document.querySelectorAll('input, textarea');
+      inputs.forEach(input => {
+        localStorage.setItem(input.id, input.type === 'checkbox' ? input.checked : input.value);
+      });
+      console.log('Data saved to localStorage');
     }
+
+	function fillSavedInfo() {
+      const inputs = document.querySelectorAll('input, textarea');
+      inputs.forEach(input => {
+        const savedValue = localStorage.getItem(input.id);
+        if (savedValue !== null) {
+          if (input.type === 'checkbox') {
+            input.checked = savedValue === 'true';
+          } else {
+            input.value = savedValue;
+          }
+        }
+      });
+      console.log('Data retrieved from localStorage');
+	}
   </script>
 </body>
 </html>
