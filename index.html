@@ -121,6 +121,21 @@
     .save-form-button-container {
       text-align: right;
     }
+    
+    .character-info {
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 20px;
+    }
+    
+    @media (max-width:500px)  { /* smartphones, Android phones, landscape iPhone */ 
+      .character-info {
+        display: grid; 
+        grid-template-columns: repeat(1, 1fr); 
+        gap: 20px;
+      }
+    
+    }
   </style>
 </head>
 <body>
@@ -254,7 +269,7 @@
       <textarea id="equipment" rows="4"></textarea>
     </div>
 
-    <div style="" class="">
+    <div style="" class="character-info">
       <div class="section">
         <h3>Focuses</h3>
         <textarea id="focuses" rows="4"></textarea>
