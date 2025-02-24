@@ -124,6 +124,9 @@
   </style>
 </head>
 <body>
+  <h1>
+    Homeworld Revelations Character Sheet
+  </h1>
   <div class="character-sheet">
     <div class="header">
       <div style="flex: 1">
@@ -294,6 +297,8 @@
   <div class="save-form-button-container">
     <button onclick="saveInfo()" class="save-form" type="button">Save</button>
 	<button onclick="fillSavedInfo()" class="retrieve-form" type="button">Retrieve</button>
+    <button onclick="exportInfo()" class="retrieve-form" type="button">Export</button>
+    <button onclick="importInfo()" class="retrieve-form" type="button">Import</button>
   </div>
   <script>
     function addWeaponRow() {
@@ -320,6 +325,22 @@
     }
 
 	function fillSavedInfo() {
+      
+      const weaponTable = document.getElementById('weaponTable').getElementsByTagName('tbody')[0];
+      let maxWeaponRow = 1;
+
+      // Check for weapon rows in localStorage and create new rows if necessary
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const match = key.match(/^weapon-(\d+)-(\d+)$/);
+        if (match) {
+          const rowIndex = parseInt(match[1], 10);
+          if (rowIndex > maxWeaponRow) {
+            maxWeaponRow = rowIndex;
+            addWeaponRow();
+          }
+        }
+      }
       const inputs = document.querySelectorAll('input, textarea');
       inputs.forEach(input => {
         const savedValue = localStorage.getItem(input.id);
@@ -331,8 +352,50 @@
           }
         }
       });
+
       console.log('Data retrieved from localStorage');
 	}
+    
+
+	function importInfo() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'application/json';
+      input.onchange = event => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = e => {
+          const data = JSON.parse(e.target.result);
+          for (const key in data) {
+            localStorage.setItem(key, data[key]);
+          }
+          console.log('Data imported from JSON');
+          fillSavedInfo();
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    }    
+    
+	function exportInfo() {
+      const inputs = document.querySelectorAll('input, textarea');
+      const data = {};
+
+      inputs.forEach(input => {
+        data[input.id] = input.type === 'checkbox' ? input.checked : input.value;
+      });
+
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'character-sheet.json';
+      a.click();
+      URL.revokeObjectURL(url);
+
+      console.log('Data exported as JSON');
+    }
   </script>
 </body>
 </html>
