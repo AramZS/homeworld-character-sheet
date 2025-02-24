@@ -299,7 +299,10 @@
 	<button onclick="fillSavedInfo()" class="retrieve-form" type="button">Retrieve</button>
     <button onclick="exportInfo()" class="retrieve-form" type="button">Export</button>
     <button onclick="importInfo()" class="retrieve-form" type="button">Import</button>
+        <button onclick="generateFilledShareURL()" class="retrieve-form" type="button">Generate Share URL</button>
   </div>
+  
+  <script language="javascript" src="base64-string.min.js" ></script>
   <script>
     function addWeaponRow() {
       const table = document.getElementById('weaponTable').getElementsByTagName('tbody')[0];
@@ -396,6 +399,45 @@
 
       console.log('Data exported as JSON');
     }
+    
+
+
+	function generateFilledShareURL() {
+      const inputs = document.querySelectorAll('input, textarea');
+      const data = {};
+
+      inputs.forEach(input => {
+        data[input.id] = input.type === 'checkbox' ? input.checked : input.value;
+      });
+
+      const json = LZString.compress(JSON.stringify(data));
+      console.log('Compressed string', json)
+      const encodedData = encodeURIComponent(json);
+      const url = `${window.location.origin}${window.location.pathname}?data=${encodedData}`;
+      prompt('Share this URL:', url);
+
+      console.log('Share URL generated');
+    }
+
+    function decodeShareURL() {
+      const params = new URLSearchParams(window.location.search);
+      const encodedData = params.get('data');
+      if (encodedData) {
+        const json = LZString.decompress(decodeURIComponent(encodedData));
+        const data = JSON.parse(json);
+        for (const key in data) {
+          localStorage.setItem(key, data[key]);
+        }
+        fillSavedInfo();
+        console.log('Data decoded from URL and loaded');
+      }
+    }
+    
+    
+    window.onload = decodeShareURL;
+    
   </script>
+  
+  
 </body>
 </html>
