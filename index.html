@@ -3,364 +3,672 @@
 <head>
   <title>Homeworld Revelations Character Sheet Creator and Manager</title>
   <style>
+    * { box-sizing: border-box; }
+
     body {
       font-family: Arial, sans-serif;
-      max-width: 800px;
+      max-width: 880px;
       margin: 20px auto;
       padding: 20px;
-      background-color: #f0f0f0;
+      background: linear-gradient(160deg, #09192b 0%, #0e2440 100%);
+      min-height: 100vh;
     }
 
+    h1 {
+      color: #4a7aa0;
+      font-size: 0.85em;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin: 0 0 12px 0;
+      font-weight: normal;
+    }
+
+    /* ── Main card ── */
     .character-sheet {
-      background-color: #fff;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background: #112035;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+      border: 1px solid #1e4070;
     }
 
+    /* ── Header banner (light) ── */
     .header {
+      background: linear-gradient(135deg, #dce8f5 0%, #c4d6ec 100%);
+      padding: 14px 20px;
       display: flex;
-      gap: 20px;
-      margin-bottom: 20px;
+      gap: 24px;
+      align-items: center;
+      border-bottom: 3px solid #1e4070;
     }
 
+    .header > div {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .header label {
+      color: #1a2840;
+      font-weight: bold;
+      white-space: nowrap;
+      font-size: 1em;
+    }
+
+    .header input[type="text"] {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #4a7ab0;
+      color: #1a2840;
+      font-weight: bold;
+      font-size: 1.1em;
+      padding: 2px 4px;
+      border-radius: 0;
+      width: 100%;
+    }
+
+    .header input[type="text"]:focus {
+      outline: none;
+      border-bottom-color: #1a60b0;
+    }
+
+    /* ── Sheet inner padding ── */
+    .sheet-content {
+      padding: 16px;
+    }
+
+    /* ── Basic info: two panels ── */
     .basic-info {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 20px;
+      gap: 12px;
+      margin-bottom: 14px;
     }
 
-    .section {
-      background-color: #2b4b8c;
-      color: white;
-      padding: 15px;
+    .info-panel {
+      background: #1a3558;
       border-radius: 8px;
-      margin-bottom: 15px;
+      padding: 14px;
+      border: 1px solid #254870;
     }
 
-    .attributes-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+    .info-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
-    .attributes-grid label, .skills-grid label {
+    .info-row:last-child { margin-bottom: 0; }
+
+    .info-row label {
+      color: #7ab0d8;
+      font-weight: bold;
+      font-size: 0.82em;
+      white-space: nowrap;
+      min-width: 130px;
+    }
+
+    .info-row input[type="text"] {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #254870;
       color: white;
+      font-size: 0.9em;
+      padding: 1px 4px;
+      flex: 1;
+      min-width: 0;
+      border-radius: 0;
+      width: auto;
     }
 
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+    .info-row input[type="number"] {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #254870;
+      color: white;
+      font-size: 0.9em;
+      padding: 1px 4px;
+      width: 60px;
+      border-radius: 0;
     }
 
-    .weapon-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
+    .info-row input:focus { outline: none; border-bottom-color: #5a90c0; }
+
+    /* ── Stress & injury ── */
+    .stress-section { margin-top: 10px; }
+
+    .stress-heading {
+      display: block;
+      color: #7ab0d8;
+      font-weight: bold;
+      font-size: 0.82em;
+      margin: 10px 0 6px;
     }
 
-    .weapon-table th, .weapon-table td {
-      border: 1px solid #ccc;
-      padding: 8px;
-    }
-
-    input[type="text"], input[type="number"] {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-
-    textarea {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-      resize: vertical;
-    }
+    .stress-heading:first-child { margin-top: 0; }
 
     .stress-boxes {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(5, 28px);
       gap: 5px;
-      margin: 10px 0;
+      margin-bottom: 4px;
+    }
+
+    .injury-row {
+      grid-template-columns: repeat(4, 28px);
+    }
+
+    .stress-label {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
     }
 
     input[type="checkbox"].stress-box {
       appearance: none;
       -webkit-appearance: none;
-      width: 20px;
-      height: 20px;
-      border: 2px solid #000;
-      border-radius: 3px;
-      background-color: white;
+      width: 28px;
+      height: 28px;
+      border: 1px solid #2a5a9a;
+      border-radius: 4px;
+      background: #0e2440;
       cursor: pointer;
       margin: 0;
+      display: block;
     }
 
     input[type="checkbox"].stress-box:checked {
-      background-color: #2b4b8c;
-      border-color: #2b4b8c;
+      background: #2a5faa;
+      border-color: #5a9ae0;
     }
 
-    label {
+    .stress-num {
+      position: absolute;
+      font-size: 0.58em;
+      color: #4a7aaa;
+      pointer-events: none;
       font-weight: bold;
-      color: #333;
+      line-height: 1;
     }
 
-    .add-weapon-btn, .save-form, .retrieve-form {
-      background-color: #2b4b8c;
+    input[type="checkbox"].stress-box:checked + .stress-num {
+      color: white;
+    }
+
+    /* ── Mid layout: attrs+skills | equipment ── */
+    .mid-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+      align-items: start;
+    }
+
+    .attrs-skills-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* ── Section panels ── */
+    .section {
+      background: #1a3558;
+      border: 1px solid #254870;
+      color: white;
+      padding: 12px 14px;
+      border-radius: 8px;
+    }
+
+    .section h3 {
+      margin: 0 0 10px 0;
+      font-size: 0.75em;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #a0c8f0;
+      text-align: right;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #254870;
+    }
+
+    /* ── Attribute & skill pill rows ── */
+    .attributes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    .attributes-grid > div,
+    .skills-grid > div {
+      display: flex;
+      align-items: stretch;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid #254870;
+    }
+
+    .attributes-grid label,
+    .skills-grid label {
+      flex: 1;
+      background: #2a5a9a;
+      color: white;
+      font-size: 0.78em;
+      padding: 5px 8px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+
+    .attributes-grid input[type="number"],
+    .skills-grid input[type="number"] {
+      width: 42px;
+      background: #0e2440;
       color: white;
       border: none;
-      padding: 8px 16px;
+      border-left: 1px solid #254870;
+      text-align: center;
+      font-weight: bold;
+      font-size: 0.95em;
+      padding: 4px 2px;
+      border-radius: 0;
+    }
+
+    .attributes-grid input[type="number"]:focus,
+    .skills-grid input[type="number"]:focus {
+      outline: none;
+      background: #162e58;
+    }
+
+    /* ── Equipment column ── */
+    .equipment-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .equipment-col .section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .equipment-col textarea {
+      flex: 1;
+      min-height: 200px;
+    }
+
+    /* ── Textareas in sections ── */
+    .section textarea {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid #254870;
+      color: white;
       border-radius: 4px;
-      cursor: pointer;
-      margin-top: 10px;
+      padding: 8px;
+      width: 100%;
+      resize: vertical;
+      font-size: 0.9em;
+      font-family: inherit;
     }
 
-    .add-weapon-btn:hover, .save-form:hover, .retrieve-form:hover {
-      background-color: #3a5ca0;
+    .section textarea:focus {
+      outline: none;
+      border-color: #5a90c0;
     }
 
-    .table-container {
-      margin-bottom: 20px;
-    }
-
-    .save-form-button-container {
-      text-align: right;
-    }
-
+    /* ── Character info: 3-column ── */
     .character-info {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      gap: 12px;
+      margin-bottom: 14px;
     }
 
-    @media (max-width:500px)  { /* smartphones, Android phones, landscape iPhone */
-      .character-info {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        gap: 20px;
-      }
+    /* ── Weapon table ── */
+    .table-container { margin-bottom: 14px; }
 
-    }
-
-    .clear-form {
-      background-color: #8c2b2b;
+    .weapon-table {
+      width: 100%;
+      border-collapse: collapse;
       color: white;
+      font-size: 0.85em;
+      background: #1a3558;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #254870;
+    }
+
+    .weapon-table th {
+      background: #112035;
+      color: #a0c8f0;
+      padding: 10px;
+      text-align: left;
+      border-bottom: 2px solid #254870;
+      font-size: 0.78em;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .weapon-table td {
+      padding: 5px 10px;
+      border-bottom: 1px solid #1e3d60;
+    }
+
+    .weapon-table input[type="text"],
+    .weapon-table input[type="number"] {
+      background: transparent;
       border: none;
-      padding: 8px 16px;
+      color: white;
+      padding: 2px;
+      font-size: 0.9em;
+      border-radius: 0;
+      border-bottom: 1px solid #767ccc;
+      width: 100%;
+    }
+
+    .weapon-table input[type="text"]:focus,
+    .weapon-table input[type="number"]:focus {
+      outline: none;
+      border-bottom-color: #5a90c0;
+    }
+
+    /* ── Buttons ── */
+    .add-weapon-btn {
+      background: #1a3558;
+      color: #a0c8f0;
+      border: 1px solid #254870;
+      padding: 6px 14px;
       border-radius: 4px;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 8px;
+      font-size: 0.85em;
     }
 
-    .clear-form:hover {
-      background-color: #a03a3a;
+    .add-weapon-btn:hover { background: #254870; }
+
+    .save-form-button-container {
+      text-align: right;
+      padding: 10px 0;
     }
 
+    .save-form, .retrieve-form {
+      background: #1a3558;
+      color: white;
+      border: 1px solid #254870;
+      padding: 7px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 8px;
+      margin-left: 4px;
+      font-size: 0.85em;
+    }
+
+    .save-form:hover, .retrieve-form:hover { background: #254870; }
+
+    .clear-form {
+      background: #4a1a1a;
+      color: white;
+      border: 1px solid #7a2a2a;
+      padding: 7px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 8px;
+      font-size: 0.85em;
+    }
+
+    .clear-form:hover { background: #6a2a2a; }
+
+    .save-form-button-container small {
+      display: block;
+      color: #4a7a9a;
+      margin-top: 8px;
+      font-size: 0.8em;
+    }
+
+    /* ── Toast ── */
     .toast {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background-color: #2b4b8c;
+      background: #1e4070;
       color: white;
       padding: 12px 20px;
-      border-radius: 4px;
+      border-radius: 6px;
+      border: 1px solid #2a5a9a;
       opacity: 0;
       transition: opacity 0.3s;
       pointer-events: none;
       z-index: 1000;
+      font-size: 0.9em;
     }
 
-    .toast.show {
-      opacity: 1;
+    .toast.show { opacity: 1; }
+
+    /* ── Responsive ── */
+    @media (max-width: 620px) {
+      body { padding: 10px; }
+      .basic-info, .mid-layout, .character-info {
+        grid-template-columns: 1fr;
+      }
+      .header { flex-wrap: wrap; gap: 10px; }
     }
   </style>
 </head>
 <body>
-  <h1>
-    Homeworld Revelations Character Sheet
-  </h1>
+  <h1>Homeworld Revelations Character Sheet</h1>
+
   <div class="character-sheet">
+
+    <!-- ── Header banner ── -->
     <div class="header">
-      <div style="flex: 1">
+      <div>
         <label for="name">Name:</label>
         <input type="text" id="name">
       </div>
-      <div style="flex: 1">
+      <div>
         <label for="role">Role:</label>
         <input type="text" id="role">
       </div>
     </div>
 
-    <div class="basic-info">
-      <div>
-        <label for="kiith-background">Kiith Background:</label>
-        <input type="text" id="kiith-background">
-        <br><br>
-        <label for="environment">Environment:</label>
-        <input type="text" id="environment">
-        <br><br>
-        <label for="upbringing">Upbringing:</label>
-        <input type="text" id="upbringing">
-        <br><br>
-        <label for="rank">Rank:</label>
-        <input type="text" id="rank">
-        <br><br>
-        <label for="requisition-units">Requisition Units:</label>
-        <input type="number" id="requisition-units" value="0">
+    <div class="sheet-content">
+
+      <!-- ── Basic info ── -->
+      <div class="basic-info">
+
+        <!-- Left panel: character bio -->
+        <div class="info-panel">
+          <div class="info-row">
+            <label for="kiith-background">Kiith Background:</label>
+            <input type="text" id="kiith-background">
+          </div>
+          <div class="info-row">
+            <label for="environment">Environment:</label>
+            <input type="text" id="environment">
+          </div>
+          <div class="info-row">
+            <label for="upbringing">Upbringing:</label>
+            <input type="text" id="upbringing">
+          </div>
+          <div class="info-row">
+            <label for="rank">Rank:</label>
+            <input type="text" id="rank">
+          </div>
+          <div class="info-row">
+            <label for="requisition-units">Requisition Units:</label>
+            <input type="number" id="requisition-units" value="0" min="0">
+          </div>
+        </div>
+
+        <!-- Right panel: armor, stress, injury -->
+        <div class="info-panel">
+          <div class="info-row">
+            <label for="armor-rating">Armor Rating:</label>
+            <input type="number" id="armor-rating" value="0" min="0">
+          </div>
+          <div class="stress-section">
+            <span class="stress-heading">Max Stress</span>
+            <div class="stress-boxes" id="max-stress">
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-1"><span class="stress-num">1</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-2"><span class="stress-num">2</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-3"><span class="stress-num">3</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-4"><span class="stress-num">4</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-5"><span class="stress-num">5</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-6"><span class="stress-num">6</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-7"><span class="stress-num">7</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-8"><span class="stress-num">8</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-9"><span class="stress-num">9</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-10"><span class="stress-num">10</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-11"><span class="stress-num">11</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-12"><span class="stress-num">12</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-13"><span class="stress-num">13</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-14"><span class="stress-num">14</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-15"><span class="stress-num">15</span></label>
+            </div>
+            <span class="stress-heading">Injury</span>
+            <div class="stress-boxes injury-row">
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="injury-1"><span class="stress-num">1</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="injury-2"><span class="stress-num">2</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="injury-3"><span class="stress-num">3</span></label>
+              <label class="stress-label"><input type="checkbox" class="stress-box" id="injury-4"><span class="stress-num">4</span></label>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /basic-info -->
+
+      <!-- ── Mid layout: attributes+skills | equipment ── -->
+      <div class="mid-layout">
+
+        <div class="attrs-skills-col">
+          <div class="section">
+            <h3>Attributes</h3>
+            <div class="attributes-grid">
+              <div>
+                <label for="agility">Agility</label>
+                <input type="number" id="agility" value="0" min="0">
+              </div>
+              <div>
+                <label for="brawn">Brawn</label>
+                <input type="number" id="brawn" value="0" min="0">
+              </div>
+              <div>
+                <label for="coordination">Coordination</label>
+                <input type="number" id="coordination" value="0" min="0">
+              </div>
+              <div>
+                <label for="insight">Insight</label>
+                <input type="number" id="insight" value="0" min="0">
+              </div>
+              <div>
+                <label for="reason">Reason</label>
+                <input type="number" id="reason" value="0" min="0">
+              </div>
+              <div>
+                <label for="will">Will</label>
+                <input type="number" id="will" value="0" min="0">
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Skills</h3>
+            <div class="skills-grid">
+              <div>
+                <label for="combat">Combat</label>
+                <input type="number" id="combat" value="0" min="0">
+              </div>
+              <div>
+                <label for="command">Command</label>
+                <input type="number" id="command" value="0" min="0">
+              </div>
+              <div>
+                <label for="engineering">Engineering</label>
+                <input type="number" id="engineering" value="0" min="0">
+              </div>
+              <div>
+                <label for="exploration">Exploration</label>
+                <input type="number" id="exploration" value="0" min="0">
+              </div>
+              <div>
+                <label for="flight">Flight</label>
+                <input type="number" id="flight" value="0" min="0">
+              </div>
+              <div>
+                <label for="medical">Medical</label>
+                <input type="number" id="medical" value="0" min="0">
+              </div>
+            </div>
+          </div>
+        </div><!-- /attrs-skills-col -->
+
+        <div class="equipment-col">
+          <div class="section">
+            <h3>Equipment</h3>
+            <textarea id="equipment" rows="12"></textarea>
+          </div>
+        </div>
+
+      </div><!-- /mid-layout -->
+
+      <!-- ── Focuses / Aspects / Truths ── -->
+      <div class="character-info">
+        <div class="section">
+          <h3>Focuses</h3>
+          <textarea id="focuses" rows="6"></textarea>
+        </div>
+        <div class="section">
+          <h3>Defining Aspects</h3>
+          <textarea id="defining-aspects" rows="6"></textarea>
+        </div>
+        <div class="section">
+          <h3>Truths and Talents</h3>
+          <textarea id="truths-talents" rows="6"></textarea>
+        </div>
       </div>
 
-      <div>
-        <label for="armor-rating">Armor Rating:</label>
-        <input type="number" id="armor-rating" value="0">
-        <br><br>
-        <label for="max-stress">Max Stress:</label>
-        <div class="stress-boxes" id="max-stress">
-          <input type="checkbox" class="stress-box" id="stress-1">
-          <input type="checkbox" class="stress-box" id="stress-2">
-          <input type="checkbox" class="stress-box" id="stress-3">
-          <input type="checkbox" class="stress-box" id="stress-4">
-          <input type="checkbox" class="stress-box" id="stress-5">
-          <input type="checkbox" class="stress-box" id="stress-6">
-          <input type="checkbox" class="stress-box" id="stress-7">
-          <input type="checkbox" class="stress-box" id="stress-8">
-          <input type="checkbox" class="stress-box" id="stress-9">
-          <input type="checkbox" class="stress-box" id="stress-10">
-          <input type="checkbox" class="stress-box" id="stress-11">
-          <input type="checkbox" class="stress-box" id="stress-12">
-          <input type="checkbox" class="stress-box" id="stress-13">
-          <input type="checkbox" class="stress-box" id="stress-14">
-          <input type="checkbox" class="stress-box" id="stress-15">
-        </div>
-        <label for="injury">Injury:</label>
-        <div class="stress-boxes" id="injury" style="grid-template-columns: repeat(3, 1fr);">
-          <input type="checkbox" class="stress-box" id="injury-1">
-          <input type="checkbox" class="stress-box" id="injury-2">
-          <input type="checkbox" class="stress-box" id="injury-3">
-          <input type="checkbox" class="stress-box" id="injury-4">
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <h3>Attributes</h3>
-      <div class="attributes-grid">
-        <div>
-          <label for="agility">Agility:</label>
-          <input type="number" id="agility" value="0" min="0">
-        </div>
-        <div>
-          <label for="brawn">Brawn:</label>
-          <input type="number" id="brawn" value="0" min="0">
-        </div>
-        <div>
-          <label for="coordination">Coordination:</label>
-          <input type="number" id="coordination" value="0" min="0">
-        </div>
-        <div>
-          <label for="insight">Insight:</label>
-          <input type="number" id="insight" value="0" min="0">
-        </div>
-        <div>
-          <label for="reason">Reason:</label>
-          <input type="number" id="reason" value="0" min="0">
-        </div>
-        <div>
-          <label for="will">Will:</label>
-          <input type="number" id="will" value="0" min="0">
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <h3>Skills</h3>
-      <div class="skills-grid">
-        <div>
-          <label for="combat">Combat:</label>
-          <input type="number" id="combat" value="0" min="0">
-        </div>
-        <div>
-          <label for="command">Command:</label>
-          <input type="number" id="command" value="0" min="0">
-        </div>
-        <div>
-          <label for="engineering">Engineering:</label>
-          <input type="number" id="engineering" value="0" min="0">
-        </div>
-        <div>
-          <label for="exploration">Exploration:</label>
-          <input type="number" id="exploration" value="0" min="0">
-        </div>
-        <div>
-          <label for="flight">Flight:</label>
-          <input type="number" id="flight" value="0" min="0">
-        </div>
-        <div>
-          <label for="medical">Medical:</label>
-          <input type="number" id="medical" value="0" min="0">
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <h3>Equipment</h3>
-      <textarea id="equipment" rows="4"></textarea>
-    </div>
-
-    <div style="" class="character-info">
-      <div class="section">
-        <h3>Focuses</h3>
-        <textarea id="focuses" rows="4"></textarea>
+      <!-- ── Weapon table ── -->
+      <div class="table-container">
+        <table class="weapon-table" id="weaponTable">
+          <thead>
+            <tr>
+              <th>Weapon</th>
+              <th>Stress Rating</th>
+              <th>Range and Type</th>
+              <th>Effects</th>
+              <th>Qualities</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" id="weapon-1-0"></td>
+              <td><input type="number" id="weapon-1-1"></td>
+              <td><input type="text" id="weapon-1-2"></td>
+              <td><input type="text" id="weapon-1-3"></td>
+              <td><input type="text" id="weapon-1-4"></td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="add-weapon-btn" onclick="addWeaponRow()">Add Weapon</button>
       </div>
 
-      <div class="section">
-        <h3>Defining Aspects</h3>
-        <textarea id="defining-aspects" rows="4"></textarea>
-      </div>
+    </div><!-- /sheet-content -->
+  </div><!-- /character-sheet -->
 
-      <div class="section">
-        <h3>Truths and Talents</h3>
-        <textarea id="truths-talents" rows="4"></textarea>
-      </div>
-    </div>
-    <div class="table-container">
-      <table class="weapon-table" id="weaponTable">
-        <thead>
-          <tr>
-            <th>Weapon</th>
-            <th>Stress Rating</th>
-            <th>Range and Type</th>
-            <th>Effects</th>
-            <th>Qualities</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><input type="text" id="weapon-1-0"></td>
-            <td><input type="number" id="weapon-1-1"></td>
-            <td><input type="text" id="weapon-1-2"></td>
-            <td><input type="text" id="weapon-1-3"></td>
-            <td><input type="text" id="weapon-1-4"></td>
-          </tr>
-        </tbody>
-      </table>
-      <button class="add-weapon-btn" onclick="addWeaponRow()">Add Weapon</button>
-    </div>
-  </div>
   <div class="save-form-button-container">
     <button onclick="newCharacter()" class="clear-form" type="button">New Character</button>
     <button onclick="saveInfo()" class="save-form" type="button">Save</button>
-	<!-- <button onclick="fillSavedInfo()" class="retrieve-form" type="button">Retrieve</button> -->
     <button onclick="exportInfo()" class="retrieve-form" type="button">Export</button>
     <button onclick="importInfo()" class="retrieve-form" type="button">Import</button>
     <button onclick="generateFilledShareURL()" class="retrieve-form" type="button">Generate Share URL</button>
-    <br /><br /><small>Save and Retrieve will work with LocalStorage. Import and URL based retrieval of your character will overwrite localStorage saved values. </small>
+    <br /><br /><small>Save stores to LocalStorage (auto-loaded on open). Import and shared URLs will overwrite saved values.</small>
   </div>
 
   <div id="toast" class="toast"></div>
