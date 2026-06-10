@@ -90,10 +90,21 @@
       margin: 10px 0;
     }
 
-    .stress-box {
+    input[type="checkbox"].stress-box {
+      appearance: none;
+      -webkit-appearance: none;
       width: 20px;
       height: 20px;
-      border: 1px solid #000;
+      border: 2px solid #000;
+      border-radius: 3px;
+      background-color: white;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    input[type="checkbox"].stress-box:checked {
+      background-color: #2b4b8c;
+      border-color: #2b4b8c;
     }
 
     label {
@@ -136,6 +147,38 @@
         gap: 20px;
       }
     
+    }
+
+    .clear-form {
+      background-color: #8c2b2b;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .clear-form:hover {
+      background-color: #a03a3a;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #2b4b8c;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      opacity: 1;
     }
   </style>
 </head>
@@ -210,27 +253,27 @@
       <div class="attributes-grid">
         <div>
           <label for="agility">Agility:</label>
-          <input type="number" id="agility" value="0">
+          <input type="number" id="agility" value="0" min="0">
         </div>
         <div>
           <label for="brawn">Brawn:</label>
-          <input type="number" id="brawn" value="0">
+          <input type="number" id="brawn" value="0" min="0">
         </div>
         <div>
           <label for="coordination">Coordination:</label>
-          <input type="number" id="coordination" value="0">
+          <input type="number" id="coordination" value="0" min="0">
         </div>
         <div>
           <label for="insight">Insight:</label>
-          <input type="number" id="insight" value="0">
+          <input type="number" id="insight" value="0" min="0">
         </div>
         <div>
           <label for="reason">Reason:</label>
-          <input type="number" id="reason" value="0">
+          <input type="number" id="reason" value="0" min="0">
         </div>
         <div>
           <label for="will">Will:</label>
-          <input type="number" id="will" value="0">
+          <input type="number" id="will" value="0" min="0">
         </div>
       </div>
     </div>
@@ -240,27 +283,27 @@
       <div class="skills-grid">
         <div>
           <label for="combat">Combat:</label>
-          <input type="number" id="combat" value="0">
+          <input type="number" id="combat" value="0" min="0">
         </div>
         <div>
           <label for="command">Command:</label>
-          <input type="number" id="command" value="0">
+          <input type="number" id="command" value="0" min="0">
         </div>
         <div>
           <label for="engineering">Engineering:</label>
-          <input type="number" id="engineering" value="0">
+          <input type="number" id="engineering" value="0" min="0">
         </div>
         <div>
           <label for="exploration">Exploration:</label>
-          <input type="number" id="exploration" value="0">
+          <input type="number" id="exploration" value="0" min="0">
         </div>
         <div>
           <label for="flight">Flight:</label>
-          <input type="number" id="flight" value="0">
+          <input type="number" id="flight" value="0" min="0">
         </div>
         <div>
           <label for="medical">Medical:</label>
-          <input type="number" id="medical" value="0">
+          <input type="number" id="medical" value="0" min="0">
         </div>
       </div>
     </div>
@@ -299,11 +342,11 @@
         </thead>
         <tbody>
           <tr>
-            <td><input type="text" id="weapon-1"></td>
-            <td><input type="number" id="stress-rating-1"></td>
-            <td><input type="text" id="range-type-1"></td>
-            <td><input type="text" id="effects-1"></td>
-            <td><input type="text" id="qualities-1"></td>
+            <td><input type="text" id="weapon-1-0"></td>
+            <td><input type="number" id="weapon-1-1"></td>
+            <td><input type="text" id="weapon-1-2"></td>
+            <td><input type="text" id="weapon-1-3"></td>
+            <td><input type="text" id="weapon-1-4"></td>
           </tr>
         </tbody>
       </table>
@@ -311,13 +354,16 @@
     </div>
   </div>
   <div class="save-form-button-container">
+    <button onclick="newCharacter()" class="clear-form" type="button">New Character</button>
     <button onclick="saveInfo()" class="save-form" type="button">Save</button>
 	<button onclick="fillSavedInfo()" class="retrieve-form" type="button">Retrieve</button>
     <button onclick="exportInfo()" class="retrieve-form" type="button">Export</button>
     <button onclick="importInfo()" class="retrieve-form" type="button">Import</button>
-        <button onclick="generateFilledShareURL()" class="retrieve-form" type="button">Generate Share URL</button>
+    <button onclick="generateFilledShareURL()" class="retrieve-form" type="button">Generate Share URL</button>
     <br /><br /><small>Save and Retrieve will work with LocalStorage. Import and URL based retrieval of your character will overwrite localStorage saved values. </small>
   </div>
+
+  <div id="toast" class="toast"></div>
   
   <script language="javascript" src="base64-string.js" ></script>
   <script language="javascript" src="lz-string.min.js" ></script>
@@ -327,7 +373,6 @@
       const newRow = table.insertRow();
       const rowCount = table.rows.length;
 
-      // Create cells with inputs
       for (let i = 0; i < 5; i++) {
         const cell = newRow.insertCell();
         const input = document.createElement('input');
@@ -337,31 +382,48 @@
       }
     }
 
-	function saveInfo() {
+    function clearExtraWeaponRows() {
+      const tbody = document.getElementById('weaponTable').getElementsByTagName('tbody')[0];
+      while (tbody.rows.length > 1) {
+        tbody.deleteRow(tbody.rows.length - 1);
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    function saveInfo() {
       const inputs = document.querySelectorAll('input, textarea');
       inputs.forEach(input => {
         localStorage.setItem(input.id, input.type === 'checkbox' ? input.checked : input.value);
       });
-      console.log('Data saved to localStorage');
+      showToast('Character saved!');
     }
 
-	function fillSavedInfo() {
-      
-      const weaponTable = document.getElementById('weaponTable').getElementsByTagName('tbody')[0];
-      let maxWeaponRow = 1;
+    function fillSavedInfo() {
+      clearExtraWeaponRows();
 
-      // Check for weapon rows in localStorage and create new rows if necessary
+      // Collect all unique weapon row indices stored in localStorage
+      const weaponRows = new Set();
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        const match = key.match(/^weapon-(\d+)-(\d+)$/);
+        const match = key.match(/^weapon-(\d+)-\d+$/);
         if (match) {
-          const rowIndex = parseInt(match[1], 10);
-          if (rowIndex > maxWeaponRow) {
-            maxWeaponRow = rowIndex;
-            addWeaponRow();
-          }
+          weaponRows.add(parseInt(match[1], 10));
         }
       }
+      // Row 1 is already in the HTML; add rows for any higher indices
+      const sortedRows = Array.from(weaponRows).sort((a, b) => a - b);
+      for (const rowIndex of sortedRows) {
+        if (rowIndex > 1) {
+          addWeaponRow();
+        }
+      }
+
       const inputs = document.querySelectorAll('input, textarea');
       inputs.forEach(input => {
         const savedValue = localStorage.getItem(input.id);
@@ -373,12 +435,9 @@
           }
         }
       });
+    }
 
-      console.log('Data retrieved from localStorage');
-	}
-    
-
-	function importInfo() {
+    function importInfo() {
       const input = document.createElement('input');
       input.type = 'file';
       input.accept = 'application/json';
@@ -387,20 +446,19 @@
         const reader = new FileReader();
         reader.onload = e => {
           localStorage.clear();
-
           const data = JSON.parse(e.target.result);
           for (const key in data) {
             localStorage.setItem(key, data[key]);
           }
-          console.log('Data imported from JSON');
           fillSavedInfo();
+          showToast('Character imported!');
         };
         reader.readAsText(file);
       };
       input.click();
-    }    
-    
-	function exportInfo() {
+    }
+
+    function exportInfo() {
       const inputs = document.querySelectorAll('input, textarea');
       const data = {};
 
@@ -416,13 +474,9 @@
       a.download = 'character-sheet.json';
       a.click();
       URL.revokeObjectURL(url);
-
-      console.log('Data exported as JSON');
     }
-    
 
-
-	function generateFilledShareURL() {
+    function generateFilledShareURL() {
       const inputs = document.querySelectorAll('input, textarea');
       const data = {};
 
@@ -430,34 +484,56 @@
         data[input.id] = input.type === 'checkbox' ? input.checked : input.value;
       });
 
-      const json = LZString.compressToEncodedURIComponent(JSON.stringify(data));
-      console.log('Compressed string', json)
-      const encodedData = json;
+      const encodedData = LZString.compressToEncodedURIComponent(JSON.stringify(data));
       const url = `${window.location.origin}${window.location.pathname}?data=${encodedData}`;
-      prompt('Share this URL:', url);
 
-      console.log('Share URL generated');
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('Share URL copied to clipboard!');
+      }).catch(() => {
+        // Fallback: show a selectable input for manual copy
+        const box = document.createElement('input');
+        box.value = url;
+        box.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:80%;padding:8px;z-index:9999;border:2px solid #2b4b8c;border-radius:4px;';
+        document.body.appendChild(box);
+        box.select();
+        showToast('Copy the URL from the box on screen.');
+        setTimeout(() => document.body.removeChild(box), 15000);
+      });
+    }
+
+    function newCharacter() {
+      if (!confirm('Clear all character data and start a new character?')) return;
+      localStorage.clear();
+      clearExtraWeaponRows();
+      document.querySelectorAll('input, textarea').forEach(input => {
+        if (input.type === 'checkbox') input.checked = false;
+        else if (input.type === 'number') input.value = '0';
+        else input.value = '';
+      });
+      window.history.replaceState({}, document.title, window.location.pathname);
+      showToast('Ready for a new character!');
     }
 
     function decodeShareURL() {
       const params = new URLSearchParams(window.location.search);
       const encodedData = params.get('data');
       if (encodedData) {
-        const json = LZString.decompressFromEncodedURIComponent(decodeURIComponent(encodedData));
+        // Fix: URLSearchParams already decodes the value, so do NOT call decodeURIComponent again
+        const json = LZString.decompressFromEncodedURIComponent(encodedData);
         const data = JSON.parse(json);
         localStorage.clear();
-
         for (const key in data) {
           localStorage.setItem(key, data[key]);
         }
         fillSavedInfo();
-        console.log('Data decoded from URL and loaded');
+      } else {
+        // Auto-load from localStorage when no URL param is present
+        fillSavedInfo();
       }
     }
-    
-    
+
     window.onload = decodeShareURL;
-    
+
   </script>
   
   
