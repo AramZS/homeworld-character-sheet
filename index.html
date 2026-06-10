@@ -355,7 +355,13 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
+    .weapon-table tbody tr:nth-child(odd) {
+      background-color: rgba(26, 53, 88, 0.3);
+    }
 
+    .weapon-table tbody tr:nth-child(even) {
+      background-color: rgba(14, 36, 64, 0.5);
+    }
     .weapon-table td {
       padding: 5px 10px;
       border-bottom: 1px solid #1e3d60;
@@ -458,6 +464,22 @@
         grid-template-columns: 1fr;
       }
       .header { flex-wrap: wrap; gap: 10px; }
+      
+      .weapon-table {
+        display: block;
+        overflow-x: auto;
+        font-size: 0.75em;
+      }
+      
+      .weapon-table th,
+      .weapon-table td {
+        padding: 4px 6px;
+      }
+      
+      .weapon-table input[type="text"],
+      .weapon-table input[type="number"] {
+        font-size: 0.8em;
+      }
     }
   </style>
 </head>
