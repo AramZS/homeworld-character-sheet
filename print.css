@@ -1,0 +1,212 @@
+/* Printable character-sheet layout tuned to match the reference sheet */
+@media print {
+	@page {
+		size: letter portrait;
+		margin: 8mm;
+	}
+
+	:root {
+		--print-bg: #b7c2d3;
+		--print-panel: #5f82bc;
+		--print-panel-dark: #2e6daf;
+		--print-panel-mid: #3f74b2;
+		--print-border: #d6e2f2;
+		--print-text: #eef5ff;
+	}
+
+	html,
+	body {
+		background: var(--print-bg) !important;
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+	}
+
+	body {
+		margin: 0;
+		margin-top: 20px;
+		padding: 0 !important;
+		max-width: none !important;
+		min-height: auto !important;
+		color: var(--print-text) !important;
+		font-family: "Arial Narrow", Arial, sans-serif !important;
+	}
+
+	h1 {
+		margin: 0 8px 6px !important;
+		color: #2f6aaa !important;
+		font-size: 9pt !important;
+		letter-spacing: 1.8px !important;
+	}
+
+	.character-sheet {
+		border: 2px solid #4f77ae !important;
+		border-radius: 14px !important;
+		background: rgba(255, 255, 255, 0.12) !important;
+		box-shadow: none !important;
+		overflow: hidden !important;
+		page-break-inside: avoid;
+	}
+
+	.sheet-content {
+		padding: 10px !important;
+		background: transparent !important;
+	}
+
+	.header {
+		background: var(--print-panel-dark) !important;
+		border-bottom: 4px solid #78a0cf !important;
+		padding: 8px 12px !important;
+		gap: 14px !important;
+	}
+
+	.header label {
+		color: var(--print-text) !important;
+		font-size: 10pt !important;
+		letter-spacing: 0.2px;
+	}
+
+	.header input[type="text"] {
+		color: #ffffff !important;
+		border-bottom: 1px solid #dbe7f5 !important;
+		font-size: 11pt !important;
+		font-weight: 700 !important;
+		padding: 0 2px !important;
+	}
+
+	.basic-info,
+	.mid-layout,
+	.character-info {
+		gap: 8px !important;
+		margin-bottom: 8px !important;
+	}
+
+	.info-panel,
+	.section,
+	.weapon-table,
+	.weapon-table tbody tr:nth-child(odd),
+	.weapon-table tbody tr:nth-child(even) {
+		background: var(--print-panel) !important;
+		border: 1px solid var(--print-border) !important;
+		color: var(--print-text) !important;
+		border-radius: 8px !important;
+	}
+
+	.section h3,
+	.weapon-table th,
+	.add-weapon-btn,
+	.save-form,
+	.retrieve-form,
+	.clear-form {
+		background: var(--print-panel-dark) !important;
+		color: #f4f9ff !important;
+		border-color: var(--print-border) !important;
+	}
+
+	.section h3 {
+		font-size: 8pt !important;
+		letter-spacing: 1px !important;
+		margin-bottom: 6px !important;
+		padding-bottom: 6px !important;
+	}
+
+	.info-row {
+		margin-bottom: 5px !important;
+	}
+
+	.info-row label,
+	.stress-heading,
+	.stress-num {
+		color: #f1f7ff !important;
+	}
+
+	.info-row input[type="text"],
+	.info-row input[type="number"],
+	.attributes-grid input[type="number"],
+	.skills-grid input[type="number"],
+	.weapon-table input[type="text"],
+	.weapon-table input[type="number"],
+	textarea {
+		background: transparent !important;
+		border: none !important;
+		border-bottom: 1px solid rgba(240, 248, 255, 0.55) !important;
+		color: #ffffff !important;
+		box-shadow: none !important;
+	}
+
+	/* Hide numeric spinner arrows in print for attributes/skills values */
+	.attributes-grid input[type="number"],
+	.skills-grid input[type="number"] {
+		appearance: textfield !important;
+		-moz-appearance: textfield !important;
+	}
+
+	.attributes-grid input[type="number"]::-webkit-outer-spin-button,
+	.attributes-grid input[type="number"]::-webkit-inner-spin-button,
+	.skills-grid input[type="number"]::-webkit-outer-spin-button,
+	.skills-grid input[type="number"]::-webkit-inner-spin-button {
+		-webkit-appearance: none !important;
+		margin: 0 !important;
+	}
+
+	.attributes-grid label,
+	.skills-grid label {
+		background: var(--print-panel-mid) !important;
+		color: #ffffff !important;
+	}
+
+	input[type="checkbox"].stress-box {
+		width: 20px !important;
+		height: 20px !important;
+		border: 1px solid #d4e2f4 !important;
+		background: #edf3fb !important;
+		border-radius: 2px !important;
+	}
+
+	input[type="checkbox"].stress-box:checked {
+		background: #2d6fb1 !important;
+		border-color: #ecf4ff !important;
+	}
+
+	.stress-boxes {
+		grid-template-columns: repeat(5, 20px) !important;
+		gap: 4px !important;
+	}
+
+	.injury-row {
+		grid-template-columns: repeat(4, 20px) !important;
+	}
+
+	.weapon-table {
+		border-collapse: separate !important;
+		border-spacing: 0 !important;
+		font-size: 9pt !important;
+	}
+
+	.weapon-table th {
+		font-size: 8pt !important;
+		padding: 7px 8px !important;
+		border-bottom: 1px solid var(--print-border) !important;
+	}
+
+	.weapon-table td {
+		padding: 4px 8px !important;
+		border-bottom: 1px solid rgba(230, 240, 252, 0.7) !important;
+	}
+
+	.save-form-button-container,
+	.toast,
+	.add-weapon-btn {
+		display: none !important;
+	}
+
+	textarea {
+		resize: none !important;
+		min-height: 120px !important;
+		line-height: 1.3 !important;
+	}
+
+	* {
+		animation: none !important;
+		transition: none !important;
+	}
+}
