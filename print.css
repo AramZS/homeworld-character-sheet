@@ -1,141 +1,240 @@
-/* Printable character-sheet layout tuned to match the reference sheet */
+/* Print stylesheet for Homeworld Revelations Character Sheet */
 @media print {
 	@page {
 		size: letter portrait;
-		margin: 8mm;
+		margin: 10mm 10mm 10mm 10mm;
 	}
 
-	:root {
-		--print-bg: #b7c2d3;
-		--print-panel: #5f82bc;
-		--print-panel-dark: #2e6daf;
-		--print-panel-mid: #3f74b2;
-		--print-border: #d6e2f2;
-		--print-text: #eef5ff;
+	/* ── Reset & base ── */
+	*,
+	*::before,
+	*::after {
+		-webkit-print-color-adjust: exact !important;
+		print-color-adjust: exact !important;
+		animation: none !important;
+		transition: none !important;
+		box-shadow: none !important;
 	}
 
 	html,
 	body {
-		background: var(--print-bg) !important;
-		-webkit-print-color-adjust: exact;
-		print-color-adjust: exact;
-	}
-
-	body {
-		margin: 0;
-		margin-top: 20px;
+		background: transparent !important;
+		margin: 0 !important;
 		padding: 0 !important;
 		max-width: none !important;
-		min-height: auto !important;
-		color: var(--print-text) !important;
+		min-height: 0 !important;
+		height: auto !important;
+		width: 100% !important;
+		color: #111 !important;
 		font-family: "Arial Narrow", Arial, sans-serif !important;
-	}
-
-	h1 {
-		margin: 0 8px 6px !important;
-		color: #2f6aaa !important;
 		font-size: 9pt !important;
-		letter-spacing: 1.8px !important;
 	}
 
+	.page-title {
+		width: 100%;
+		padding: 6px;
+		clear: both;
+	}
+
+	/* ── Page title ── */
+	h1 {
+		margin: 0 0 6px 0 !important;
+		color: #2a4a70 !important;
+		font-size: 8pt !important;
+		letter-spacing: 2px !important;
+		font-weight: normal !important;
+	}
+
+	/* ── Outer card ── */
 	.character-sheet {
-		border: 2px solid #4f77ae !important;
-		border-radius: 14px !important;
-		background: rgba(255, 255, 255, 0.12) !important;
-		box-shadow: none !important;
-		overflow: hidden !important;
+		border: 1.5px solid #6a8ab0 !important;
+		border-radius: 10px !important;
+		background: transparent !important;
+		overflow: visible !important;
+		width: 100% !important;
+	}
+
+	.sheet-content > div {
 		page-break-inside: avoid;
 	}
 
-	.sheet-content {
-		padding: 10px !important;
-		background: transparent !important;
+	/* ── Header banner ── */
+	.header {
+		background: #c8d8ec !important;
+		border-bottom: 2px solid #7a9ac0 !important;
+		padding: 7px 12px !important;
+		gap: 16px !important;
+		display: flex !important;
+		align-items: center !important;
+		border-radius: 8px 8px 0 0 !important;
 	}
 
-	.header {
-		background: var(--print-panel-dark) !important;
-		border-bottom: 4px solid #78a0cf !important;
-		padding: 8px 12px !important;
-		gap: 14px !important;
+	.header > div {
+		display: flex !important;
+		align-items: center !important;
+		gap: 6px !important;
+		flex: 1 !important;
 	}
 
 	.header label {
-		color: var(--print-text) !important;
-		font-size: 10pt !important;
-		letter-spacing: 0.2px;
+		color: #1a2840 !important;
+		font-weight: bold !important;
+		font-size: 9pt !important;
+		white-space: nowrap !important;
 	}
 
 	.header input[type="text"] {
-		color: #ffffff !important;
-		border-bottom: 1px solid #dbe7f5 !important;
-		font-size: 11pt !important;
-		font-weight: 700 !important;
-		padding: 0 2px !important;
+		background: transparent !important;
+		border: none !important;
+		border-bottom: 1.5px solid #3a6a9a !important;
+		color: #111 !important;
+		font-weight: bold !important;
+		font-size: 10pt !important;
+		padding: 1px 2px !important;
+		width: 100% !important;
+		border-radius: 0 !important;
 	}
 
-	.basic-info,
-	.mid-layout,
-	.character-info {
+	/* ── Sheet content ── */
+	.sheet-content {
+		padding: 8px 10px !important;
+		background: transparent !important;
+	}
+
+	/* ── Grids ── */
+	.basic-info {
+		display: grid !important;
+		grid-template-columns: 1fr 1fr !important;
 		gap: 8px !important;
 		margin-bottom: 8px !important;
 	}
 
-	.info-panel,
-	.section,
-	.weapon-table,
-	.weapon-table tbody tr:nth-child(odd),
-	.weapon-table tbody tr:nth-child(even) {
-		background: var(--print-panel) !important;
-		border: 1px solid var(--print-border) !important;
-		color: var(--print-text) !important;
-		border-radius: 8px !important;
+	.mid-layout {
+		display: grid !important;
+		grid-template-columns: 1fr 1fr !important;
+		gap: 8px !important;
+		margin-bottom: 8px !important;
+		align-items: start !important;
 	}
 
-	.section h3,
-	.weapon-table th,
-	.add-weapon-btn,
-	.save-form,
-	.retrieve-form,
-	.clear-form {
-		background: var(--print-panel-dark) !important;
-		color: #f4f9ff !important;
-		border-color: var(--print-border) !important;
+	.character-info {
+		display: grid !important;
+		grid-template-columns: repeat(3, 1fr) !important;
+		gap: 8px !important;
+		margin-bottom: 8px !important;
+	}
+
+	/* ── Panels ── */
+	.info-panel {
+		background: #dce8f8 !important;
+		border: 1px solid #8aaad0 !important;
+		border-radius: 6px !important;
+		padding: 8px 10px !important;
+		color: #111 !important;
+	}
+
+	.section {
+		background: #dce8f8 !important;
+		border: 1px solid #8aaad0 !important;
+		border-radius: 6px !important;
+		padding: 8px 10px !important;
+		color: #111 !important;
 	}
 
 	.section h3 {
-		font-size: 8pt !important;
-		letter-spacing: 1px !important;
-		margin-bottom: 6px !important;
-		padding-bottom: 6px !important;
+		margin: 0 0 6px 0 !important;
+		font-size: 7pt !important;
+		text-transform: uppercase !important;
+		letter-spacing: 1.5px !important;
+		color: #1a3a60 !important;
+		background: #b0c8e4 !important;
+		border-radius: 3px !important;
+		padding: 3px 6px !important;
+		border-bottom: 1px solid #8aaad0 !important;
+		text-align: right !important;
 	}
 
+	/* ── Info rows ── */
 	.info-row {
-		margin-bottom: 5px !important;
+		display: flex !important;
+		align-items: baseline !important;
+		gap: 6px !important;
+		margin-bottom: 7px !important;
 	}
 
-	.info-row label,
-	.stress-heading,
-	.stress-num {
-		color: #f1f7ff !important;
+	.info-row:last-child { margin-bottom: 0 !important; }
+
+	.info-row label {
+		color: #2a4a70 !important;
+		font-weight: bold !important;
+		font-size: 7.5pt !important;
+		white-space: nowrap !important;
+		min-width: 110px !important;
 	}
 
 	.info-row input[type="text"],
-	.info-row input[type="number"],
-	.attributes-grid input[type="number"],
-	.skills-grid input[type="number"],
-	.weapon-table input[type="text"],
-	.weapon-table input[type="number"],
-	textarea {
+	.info-row input[type="number"] {
 		background: transparent !important;
 		border: none !important;
-		border-bottom: 1px solid rgba(240, 248, 255, 0.55) !important;
-		color: #ffffff !important;
-		box-shadow: none !important;
+		border-bottom: 1px solid #5a7aa0 !important;
+		color: #111 !important;
+		font-size: 9pt !important;
+		padding: 1px 3px !important;
+		flex: 1 !important;
+		min-width: 0 !important;
+		min-height: 18px !important;
+		border-radius: 0 !important;
+		width: auto !important;
 	}
 
-	/* Hide numeric spinner arrows in print for attributes/skills values */
+	/* ── Attribute & skill pill rows ── */
+	.attrs-skills-col {
+		display: flex !important;
+		flex-direction: column !important;
+		gap: 8px !important;
+	}
+
+	.attributes-grid,
+	.skills-grid {
+		display: grid !important;
+		grid-template-columns: repeat(2, 1fr) !important;
+		gap: 4px !important;
+	}
+
+	.attributes-grid > div,
+	.skills-grid > div {
+		display: flex !important;
+		align-items: stretch !important;
+		border-radius: 3px !important;
+		overflow: hidden !important;
+		border: 1px solid #7a9ac0 !important;
+	}
+
+	.attributes-grid label,
+	.skills-grid label {
+		flex: 1 !important;
+		background: #8aaace !important;
+		color: #fff !important;
+		font-size: 7.5pt !important;
+		padding: 4px 6px !important;
+		font-weight: bold !important;
+		display: flex !important;
+		align-items: center !important;
+	}
+
 	.attributes-grid input[type="number"],
 	.skills-grid input[type="number"] {
+		width: 36px !important;
+		background: #eef4fc !important;
+		color: #111 !important;
+		border: none !important;
+		border-left: 1px solid #7a9ac0 !important;
+		text-align: center !important;
+		font-weight: bold !important;
+		font-size: 9pt !important;
+		padding: 3px 2px !important;
+		border-radius: 0 !important;
+		/* hide spinners */
 		appearance: textfield !important;
 		-moz-appearance: textfield !important;
 	}
@@ -148,65 +247,160 @@
 		margin: 0 !important;
 	}
 
-	.attributes-grid label,
-	.skills-grid label {
-		background: var(--print-panel-mid) !important;
-		color: #ffffff !important;
+	/* ── Equipment column ── */
+	.equipment-col {
+		display: flex !important;
+		flex-direction: column !important;
 	}
 
-	input[type="checkbox"].stress-box {
-		width: 20px !important;
-		height: 20px !important;
-		border: 1px solid #d4e2f4 !important;
-		background: #edf3fb !important;
-		border-radius: 2px !important;
+	.equipment-col .section {
+		flex: 1 !important;
+		display: flex !important;
+		flex-direction: column !important;
 	}
 
-	input[type="checkbox"].stress-box:checked {
-		background: #2d6fb1 !important;
-		border-color: #ecf4ff !important;
+	/* ── Textareas: generous handwriting space ── */
+	textarea {
+		background: transparent !important;
+		border: none !important;
+		border-bottom: 1px solid #5a7aa0 !important;
+		color: #111 !important;
+		font-size: 8.5pt !important;
+		padding: 3px 4px !important;
+		width: 100% !important;
+		resize: none !important;
+		/* Lined-paper effect for handwriting room */
+		background-image: repeating-linear-gradient(
+			to bottom,
+			transparent,
+			transparent 22px,
+			#b0c4de 22px,
+			#b0c4de 23px
+		) !important;
+		background-attachment: local !important;
+		line-height: 23px !important;
+		min-height: 115px !important;
+	}
+
+	.equipment-col textarea {
+		min-height: 160px !important;
+	}
+
+	/* ── Stress & injury checkboxes ── */
+	.stress-section { margin-top: 6px !important; }
+
+	.stress-heading {
+		display: block !important;
+		color: #2a4a70 !important;
+		font-weight: bold !important;
+		font-size: 7.5pt !important;
+		margin: 6px 0 4px !important;
 	}
 
 	.stress-boxes {
-		grid-template-columns: repeat(5, 20px) !important;
-		gap: 4px !important;
+		display: grid !important;
+		grid-template-columns: repeat(5, 22px) !important;
+		gap: 3px !important;
+		margin-bottom: 4px !important;
 	}
 
 	.injury-row {
-		grid-template-columns: repeat(4, 20px) !important;
+		grid-template-columns: repeat(4, 22px) !important;
 	}
 
+	.stress-label {
+		position: relative !important;
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+	}
+
+	input[type="checkbox"].stress-box {
+		appearance: none !important;
+		-webkit-appearance: none !important;
+		width: 22px !important;
+		height: 22px !important;
+		border: 1.5px solid #5a7aa0 !important;
+		border-radius: 3px !important;
+		background: #eef4fc !important;
+		margin: 0 !important;
+		display: block !important;
+	}
+
+	input[type="checkbox"].stress-box:checked {
+		background: #4a7ab0 !important;
+		border-color: #2a5a90 !important;
+	}
+
+	.stress-num {
+		position: absolute !important;
+		font-size: 6pt !important;
+		color: #5a7aaa !important;
+		pointer-events: none !important;
+		font-weight: bold !important;
+		line-height: 1 !important;
+	}
+
+	input[type="checkbox"].stress-box:checked + .stress-num {
+		color: #fff !important;
+	}
+
+	/* ── Weapon table ── */
+	.table-container { margin-bottom: 8px !important; }
+
 	.weapon-table {
-		border-collapse: separate !important;
-		border-spacing: 0 !important;
-		font-size: 9pt !important;
+		width: 100% !important;
+		border-collapse: collapse !important;
+		font-size: 8pt !important;
+		background: #dce8f8 !important;
+		border-radius: 6px !important;
+		overflow: hidden !important;
+		border: 1px solid #8aaad0 !important;
+		color: #111 !important;
 	}
 
 	.weapon-table th {
-		font-size: 8pt !important;
-		padding: 7px 8px !important;
-		border-bottom: 1px solid var(--print-border) !important;
+		background: #b0c8e4 !important;
+		color: #1a3a60 !important;
+		padding: 5px 8px !important;
+		text-align: left !important;
+		border-bottom: 1.5px solid #8aaad0 !important;
+		font-size: 7pt !important;
+		text-transform: uppercase !important;
+		letter-spacing: 0.5px !important;
+	}
+
+	.weapon-table tbody tr {
+		background: transparent !important;
+	}
+
+	.weapon-table tbody tr:nth-child(even) {
+		background: rgba(176, 200, 228, 0.3) !important;
 	}
 
 	.weapon-table td {
-		padding: 4px 8px !important;
-		border-bottom: 1px solid rgba(230, 240, 252, 0.7) !important;
+		padding: 5px 8px !important;
+		border-bottom: 1px solid #8aaad0 !important;
+		min-height: 24px !important;
 	}
 
+	.weapon-table input[type="text"],
+	.weapon-table input[type="number"] {
+		background: transparent !important;
+		border: none !important;
+		border-bottom: 1px solid #7a9ac0 !important;
+		color: #111 !important;
+		padding: 1px 2px !important;
+		font-size: 8pt !important;
+		width: 100% !important;
+		min-height: 18px !important;
+		border-radius: 0 !important;
+	}
+
+	/* ── Hide interactive-only UI ── */
 	.save-form-button-container,
 	.toast,
 	.add-weapon-btn {
 		display: none !important;
-	}
-
-	textarea {
-		resize: none !important;
-		min-height: 120px !important;
-		line-height: 1.3 !important;
-	}
-
-	* {
-		animation: none !important;
-		transition: none !important;
 	}
 }
