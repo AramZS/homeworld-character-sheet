@@ -156,6 +156,10 @@
       margin-bottom: 4px;
     }
 
+    .stress-controls {
+      margin: 6px 0 8px;
+    }
+
     .injury-row {
       grid-template-columns: repeat(4, 28px);
     }
@@ -399,6 +403,18 @@
 
     .add-weapon-btn:hover { background: #254870; }
 
+    .add-stress-btn {
+      background: #1a3558;
+      color: #a0c8f0;
+      border: 1px solid #254870;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.78em;
+    }
+
+    .add-stress-btn:hover { background: #254870; }
+
     .save-form-button-container {
       text-align: right;
       padding: 10px 0;
@@ -554,6 +570,9 @@
               <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-13"><span class="stress-num">13</span></label>
               <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-14"><span class="stress-num">14</span></label>
               <label class="stress-label"><input type="checkbox" class="stress-box" id="stress-15"><span class="stress-num">15</span></label>
+            </div>
+            <div class="stress-controls">
+              <button class="add-stress-btn no-print" onclick="addStressBox()" type="button">Add Stress Box</button>
             </div>
             <span class="stress-heading">Injury</span>
             <div class="stress-boxes injury-row">
@@ -720,6 +739,35 @@
       }
     }
 
+    function addStressBox() {
+      const maxStress = document.getElementById('max-stress');
+      const currentCount = maxStress.querySelectorAll('input.stress-box[id^="stress-"]').length;
+      const nextNumber = currentCount + 1;
+
+      const label = document.createElement('label');
+      label.className = 'stress-label';
+
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.className = 'stress-box';
+      input.id = `stress-${nextNumber}`;
+
+      const number = document.createElement('span');
+      number.className = 'stress-num';
+      number.textContent = String(nextNumber);
+
+      label.appendChild(input);
+      label.appendChild(number);
+      maxStress.appendChild(label);
+    }
+
+    function clearExtraStressBoxes() {
+      const maxStress = document.getElementById('max-stress');
+      while (maxStress.querySelectorAll('.stress-label').length > 15) {
+        maxStress.removeChild(maxStress.lastElementChild);
+      }
+    }
+
     function showToast(message) {
       const toast = document.getElementById('toast');
       toast.textContent = message;
@@ -737,14 +785,21 @@
 
     function fillSavedInfo() {
       clearExtraWeaponRows();
+      clearExtraStressBoxes();
 
       // Collect all unique weapon row indices stored in localStorage
       const weaponRows = new Set();
+      let maxStressIndex = 15;
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         const match = key.match(/^weapon-(\d+)-\d+$/);
         if (match) {
           weaponRows.add(parseInt(match[1], 10));
+        }
+
+        const stressMatch = key.match(/^stress-(\d+)$/);
+        if (stressMatch) {
+          maxStressIndex = Math.max(maxStressIndex, parseInt(stressMatch[1], 10));
         }
       }
       // Row 1 is already in the HTML; add rows for any higher indices
@@ -753,6 +808,11 @@
         if (rowIndex > 1) {
           addWeaponRow();
         }
+      }
+
+      const currentStressCount = document.querySelectorAll('#max-stress input.stress-box[id^="stress-"]').length;
+      for (let i = currentStressCount; i < maxStressIndex; i++) {
+        addStressBox();
       }
 
       const inputs = document.querySelectorAll('input, textarea');
@@ -836,6 +896,7 @@
       if (!confirm('Clear all character data and start a new character?')) return;
       localStorage.clear();
       clearExtraWeaponRows();
+      clearExtraStressBoxes();
       document.querySelectorAll('input, textarea').forEach(input => {
         if (input.type === 'checkbox') input.checked = false;
         else if (input.type === 'number') input.value = '0';

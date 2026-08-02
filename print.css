@@ -195,7 +195,8 @@
 
 	.save-form-button-container,
 	.toast,
-	.add-weapon-btn {
+	.add-weapon-btn,
+	.no-print {
 		display: none !important;
 	}
 
